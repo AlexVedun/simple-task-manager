@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read string $date_of_creation
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Task[] $tasks
  * @property-read int|null $tasks_count
  * @method static \Illuminate\Database\Eloquent\Builder|Tag newModelQuery()
@@ -31,6 +32,10 @@ class Tag extends Model
         'updated_at',
     ];
 
+    protected $appends = [
+        'date_of_creation',
+    ];
+
     // Relations
 
     /**
@@ -39,5 +44,15 @@ class Tag extends Model
     public function tasks()
     {
         return $this->belongsToMany(Task::class)->withTimestamps();
+    }
+
+    // Attributes
+
+    /**
+     * @return string
+     */
+    public function getDateOfCreationAttribute(): string
+    {
+        return $this->created_at->format('Y-m-d');
     }
 }
