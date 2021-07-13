@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Task[] $tasks
+ * @property-read int|null $tasks_count
  * @method static \Illuminate\Database\Eloquent\Builder|Tag newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Tag newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Tag query()
@@ -28,4 +30,14 @@ class Tag extends Model
         'created_at',
         'updated_at',
     ];
+
+    // Relations
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function tasks()
+    {
+        return $this->belongsToMany(Task::class)->withTimestamps();
+    }
 }

@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $description
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Tag[] $tags
+ * @property-read int|null $tags_count
  * @method static \Illuminate\Database\Eloquent\Builder|Task newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Task newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Task query()
@@ -26,4 +28,19 @@ use Illuminate\Database\Eloquent\Model;
 class Task extends Model
 {
     protected $guarded = ['id'];
+
+    protected $dates = [
+        'created_at',
+        'updated_at',
+    ];
+
+    // Relations
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class)->withTimestamps();
+    }
 }
