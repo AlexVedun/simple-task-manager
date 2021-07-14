@@ -3,62 +3,61 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\NewTaskRequest;
+use App\Http\Resources\TaskResource;
+use App\Http\Resources\TaskWithTagsResource;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class TaskController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return TaskResource::collection(Task::all());
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param NewTaskRequest $request
+     * @return TaskWithTagsResource
      */
-    public function store(Request $request)
+    public function store(NewTaskRequest $request)
     {
-        //
+        try {
+            $task = Task::create([
+                'name' => $request->get('name'),
+                'description' => $request->get('description'),
+            ]);
+            if ($request->has('tags_id')) {
+                $task->tags()->sync($request->get('tags_id'));
+            }
+            $task->refresh();
+
+            return TaskWithTagsResource::make($task);
+        } catch (\Throwable $exception) {
+            return response()->json([
+                'Status' => 'Error',
+                'Message' => 'Error when creating new task!',
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
      * Display the specified resource.
      *
      * @param  \App\Models\Task  $task
-     * @return \Illuminate\Http\Response
+     * @return TaskWithTagsResource
      */
     public function show(Task $task)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Task  $task
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Task $task)
-    {
-        //
+        return TaskWithTagsResource::make($task);
     }
 
     /**
