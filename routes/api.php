@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Api\TagController;
 use App\Http\Controllers\Api\TaskController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+// GET 'tags'           - get all tags
+// GET 'tags/{tag_id}'  - get tag with id={tag_id}
+// POST 'tags'          - create new tag
 Route::apiResource('tags', TagController::class)
     ->only(['index', 'show', 'store'])
     ->missing(function () {
@@ -24,6 +27,9 @@ Route::apiResource('tags', TagController::class)
         ], \Illuminate\Http\Response::HTTP_UNPROCESSABLE_ENTITY);
     });
 
+// GET 'tasks'           - get all tasks
+// GET 'tasks/{task_id}' - get task with id = {task_id}
+// POST 'tasks'          - create new task
 Route::apiResource('tasks', TaskController::class)
     ->only(['index', 'show', 'store'])
     ->missing(function () {

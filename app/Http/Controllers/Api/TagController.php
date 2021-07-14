@@ -15,7 +15,7 @@ class TagController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function index()
     {
@@ -26,7 +26,7 @@ class TagController extends Controller
      * Store a newly created resource in storage.
      *
      * @param NewTagRequest $request
-     * @return \Illuminate\Http\Response
+     * @return TagResource
      */
     public function store(NewTagRequest $request)
     {
@@ -48,7 +48,7 @@ class TagController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Tag  $tag
-     * @return \Illuminate\Http\Response
+     * @return TagWithTasksResource
      */
     public function show(Tag $tag)
     {
